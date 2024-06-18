@@ -7,7 +7,7 @@ func commandHelp() error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	for _, cmd := range getCommands() {
-		fmt.Printf("%v\n", cmd.description)
+		fmt.Printf("%v: %v\n", cmd.name, cmd.description)
 	}
 	return nil
 }
