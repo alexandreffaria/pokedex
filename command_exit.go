@@ -6,7 +6,7 @@ import (
 )
 
 func commandExit() error {
-	fmt.Println("Command EXIT")
+	fmt.Println("Bye bye!")
 	os.Exit(0)
 	return nil
 }

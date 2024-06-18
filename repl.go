@@ -4,31 +4,56 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func startREPL() {
-	commands := make(map[string]cliCommand)
 
-	commands["help"] = cliCommand{
-		name:        "help",
-		description: "shows help message",
-		callback:    commandHelp,
-	}
-	commands["exit"] = cliCommand{
-		name:        "exit",
-		description: "exit program",
-		callback:    commandExit,
-	}
 	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Print("pokedex > ")
-	for scanner.Scan() {
-		input := scanner.Text()
-		if input == "exit" {
-			commands["exit"].callback()
-		} else if input == "help" {
-			commands["help"].callback()
-		}
+
+	for {
 		fmt.Print("pokedex > ")
+		scanner.Scan()
+		input := scanner.Text()
+		words := cleanInput(input)
+
+		commandName := words[0]
+		command, exists := getCommands()[commandName]
+
+		if exists {
+			command.callback()
+		} else {
+			fmt.Println("Unknown command")
+			continue
+		}
+
 	}
 
+}
+
+type cliCommand struct {
+	name        string
+	description string
+	callback    func() error
+}
+
+func getCommands() map[string]cliCommand {
+	return map[string]cliCommand{
+		"help": {
+			name:        "help",
+			description: "shows help message",
+			callback:    commandHelp,
+		},
+		"exit": {
+			name:        "exit",
+			description: "Exit the program",
+			callback:    commandExit,
+		},
+	}
+}
+
+func cleanInput(input string) []string {
+	output := strings.ToLower(input)
+	words := strings.Fields(output)
+	return words
 }
