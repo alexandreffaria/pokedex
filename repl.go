@@ -37,6 +37,11 @@ type cliCommand struct {
 	callback    func() error
 }
 
+type Config struct {
+	next string
+	prev string
+}
+
 func getCommands() map[string]cliCommand {
 	return map[string]cliCommand{
 		"help": {
